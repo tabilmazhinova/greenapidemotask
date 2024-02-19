@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Interaction Interface</title>
+<style>
+  body { font-family: 'Arial', sans-serif; background: #f7f7f7; }
+  .container { display: flex; max-width: 1800px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .input-column { width: 50%; padding-right: 20px; }
+  .response-column { width: 50%; }
+  .input-group { margin-bottom: 12px; }
+  .input-group input, .input-group button { width: 80%; padding: 10px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; }
+  .response { background-color: #f2f2f2; padding: 10px; border-radius: 4px; margin-top: 10px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; height: 300px; }
+  #apiResponse { white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="input-column">
+        <div class="input-group">
+            <input type="text" id="idInstance" placeholder="idInstance">
+        </div>
+        <div class="input-group">
+            <input type="text" id="apiTokenInstance" placeholder="ApiTokenInstance">
+        </div>
+        <div class="input-group">
+            <button onclick="getSettings()">getSettings</button>
+            <button onclick="getStateInstance()">getStateInstance</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="sendMessagePhoneNumber" placeholder="Phone Number for SendMessage">
+            <input type="text" id="sendMessageText" placeholder="Message Text">
+            <button onclick="sendMessage()">sendMessage</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="sendFilePhoneNumber" placeholder="Phone Number for SendFile">
+            <input type="text" id="sendFileUrl" placeholder="File URL">
+            <input type="text" id="sendFileName" placeholder="File Name">
+            <input type="text" id="sendFileCaption" placeholder="File Caption">
+            <button onclick="sendFileByUrl()">sendFileByUrl</button>
+        </div>
+    </div>
+    <div class="response-column">
+        <h2>Ответы:</h2>
+        <div class="response" id="apiResponse" style="min-height: 500px; overflow-y: auto;">
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Placeholder functions for API interaction
+// Function to handle getting settings from the API
+function getSettings() {
+    const idInstance = document.getElementById('idInstance').value;
+    const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+    const url = `https://api.green-api.com/waInstance${idInstance}/getSettings/${apiTokenInstance}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiTokenInstance}` // Adjust based on API's expected auth method
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        displayApiResponse(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayApiResponse(error.toString());
+    });
+}
+
+
+
+// Function to handle getting state instance from the API
+function getStateInstance() {
+    const idInstance = document.getElementById('idInstance').value;
+    const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+    const url = `https://api.green-api.com/waInstance${idInstance}/getStateInstance/${apiTokenInstance}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiTokenInstance}` // This might need to be adjusted based on the API's requirements
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        displayApiResponse(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayApiResponse(error.toString());
+    });
+}
+
+
+// Function to handle sending a message using the API
+function sendMessage() {
+    const idInstance = document.getElementById('idInstance').value;
+    const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+    const phoneNumber = document.getElementById('sendMessagePhoneNumber').value;
+    const messageText = document.getElementById('sendMessageText').value;
+    const url = `https://api.green-api.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
+
+    // Adjusting the body to match the expected structure
+    const requestBody = {
+        chatId: phoneNumber + "@c.us", // Modify as necessary to match API documentation
+        message: messageText
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiTokenInstance}`
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        displayApiResponse(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayApiResponse(error.toString());
+    });
+}
+
+
+
+// Function to handle sending a file by URL using the API
+function sendFileByUrl() {
+    const idInstance = document.getElementById('idInstance').value;
+    const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+    const phoneNumber = document.getElementById('sendFilePhoneNumber').value; // Assuming input ID for phone number
+    const fileUrl = document.getElementById('sendFileUrl').value; // Assuming input ID for file URL
+    const fileName = document.getElementById('sendFileName').value; // Assuming input ID for file name
+    const caption = document.getElementById('sendFileCaption').value; // Assuming input ID for file caption
+    
+    const url = `https://api.green-api.com/waInstance${idInstance}/sendFileByUrl/${apiTokenInstance}`;
+
+    const requestBody = {
+        chatId: phoneNumber + "@c.us",
+        urlFile: fileUrl,
+        fileName: fileName,
+        caption: caption
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiTokenInstance}`
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        displayApiResponse(JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayApiResponse(error.toString());
+    });
+}
+
+
+   
+// Utility function to display the API response
+function displayApiResponse(response) {
+    document.getElementById('apiResponse').textContent = response;
+}
+
+
+// Implement actual API calls and response handling in above functions
+</script>
+</body>
+</html>
