@@ -50,8 +50,7 @@
 </div>
 
 <script>
-// Placeholder functions for API interaction
-// Function to handle getting settings from the API
+
 function getSettings() {
     const idInstance = document.getElementById('idInstance').value;
     const apiTokenInstance = document.getElementById('apiTokenInstance').value;
@@ -81,7 +80,7 @@ function getSettings() {
 
 
 
-// Function to handle getting state instance from the API
+
 function getStateInstance() {
     const idInstance = document.getElementById('idInstance').value;
     const apiTokenInstance = document.getElementById('apiTokenInstance').value;
@@ -110,7 +109,7 @@ function getStateInstance() {
 }
 
 
-// Function to handle sending a message using the API
+
 function sendMessage() {
     const idInstance = document.getElementById('idInstance').value;
     const apiTokenInstance = document.getElementById('apiTokenInstance').value;
@@ -118,9 +117,9 @@ function sendMessage() {
     const messageText = document.getElementById('sendMessageText').value;
     const url = `https://api.green-api.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
 
-    // Adjusting the body to match the expected structure
+
     const requestBody = {
-        chatId: phoneNumber + "@c.us", // Modify as necessary to match API documentation
+        chatId: phoneNumber + "@c.us", 
         message: messageText
     };
 
@@ -149,7 +148,7 @@ function sendMessage() {
 
 
 
-// Function to handle sending a file by URL using the API
+
 function sendFileByUrl() {
     const idInstance = document.getElementById('idInstance').value;
     const apiTokenInstance = document.getElementById('apiTokenInstance').value;
@@ -192,13 +191,13 @@ function sendFileByUrl() {
 
 
    
-// Utility function to display the API response
+
 function displayApiResponse(response) {
     document.getElementById('apiResponse').textContent = response;
 }
 
 
-// Implement actual API calls and response handling in above functions
+
 </script>
 </body>
 </html>
